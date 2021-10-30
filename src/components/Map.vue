@@ -6,18 +6,23 @@
             v-if="!isLoading"
             class="map-root"
         >
-            <!-- map -->
+            <MapSVG />
         </div>
         <div v-else>Loading...</div>
     </div>
 </template>
 
 <script>
+import MapSVG from '../assets/images/map.svg';
+
 export default {
     data() {
         return {
             isLoading: false,
         };
+    },
+    components: {
+        MapSVG,
     },
 };
 </script>
