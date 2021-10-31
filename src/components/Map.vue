@@ -6,23 +6,61 @@
             v-if="!isLoading"
             class="map-root"
         >
-            <MapSVG />
+            <PlanSVG v-if="!planSVGError" ref="plan-svg"/>
+            <div v-else>Ошибка отображения карты</div>
+            <WorkPlaceSVG v-show="false" ref="wp-svg" />
         </div>
         <div v-else>Loading...</div>
     </div>
 </template>
 
 <script>
-import MapSVG from '../assets/images/map.svg';
+import tablesData from '../assets/data/tables.json';
+import PlanSVG from '../assets/images/map.svg';
+import WorkPlaceSVG from '../assets/images/workPlace.svg';
+import * as d3 from 'd3';
 
 export default {
     data() {
         return {
+            tables: [],
             isLoading: false,
+            planSVG: null,
+            planSVGError: false,
+            planGroup: null,
+            workPlaceSVG: null,
         };
     },
     components: {
-        MapSVG,
+        PlanSVG,
+        WorkPlaceSVG,
+    },
+    created() {
+        this.tables = tablesData;
+    },
+    mounted() {
+        this.isLoading = true;
+        this.planSVG = d3.select(this.$refs['plan-svg']);
+        this.workPlaceSVG = d3.select(this.$refs['wp-svg']);
+        this.planGroup = this.planSVG.select('#plan-group');
+        if (this.planGroup.empty()) {
+            this.planSVGError = true;
+        } else {
+            this.drawTables();
+        }
+        this.isLoading = false;
+    },
+    methods: {
+        drawTables() {
+            this.tables.map((table) => {
+                this.planGroup.append('g')
+                    .attr('id', `place${table._id}-group`)
+                    .attr('division-id', `${table.group_id}`)
+                    .classed("workplace", true)
+                    .style('transform', `translate(${table.x}px, ${table.y}px) rotate(${table.rotate || 0}deg) scale(0.5)`)
+                    .html(this.workPlaceSVG.html());
+            });
+        },
     },
 };
 </script>
