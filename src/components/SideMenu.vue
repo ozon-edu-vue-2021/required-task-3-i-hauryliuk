@@ -27,14 +27,16 @@
                         v-if="legend.length > 0"
                         class="legend__items"
                     >
-                        <LegendItem
-                            v-for="(item, index) in legend"
-                            :key="index"
-                            :color="item.color"
-                            :text="item.text"
-                            :counter="item.counter"
-                            class="legend__item"
-                        />
+                        <Draggable v-model="legend">
+                            <LegendItem
+                                v-for="(item, index) in legend"
+                                :key="index"
+                                :color="item.color"
+                                :text="item.text"
+                                :counter="item.counter"
+                                class="legend__item"
+                            />
+                        </Draggable>
                     </div>
                     <span
                         v-else
@@ -69,6 +71,8 @@ import LegendItem from "./SideMenu/LegendItem.vue";
 import PersonCard from "./SideMenu/PersonCard.vue";
 import legendData from "@/assets/data/legend.json";
 import { Doughnut as PieChart } from "vue-chartjs";
+import Draggable from "vuedraggable";
+
 
 export default {
     props: {
@@ -85,6 +89,7 @@ export default {
         LegendItem,
         PersonCard,
         PieChart,
+        Draggable,
     },
     data() {
         return {
