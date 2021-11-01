@@ -6,7 +6,7 @@
     <Map :legend="legend" />
     <SideMenu
       :legend.sync="legend"
-      :person.sync="personAtWorkplace"
+      :person.sync="selectedPerson"
       :isUserOpenned.sync="isWorkplaceSelected"
     />
   </div>
@@ -29,7 +29,7 @@ export default {
       legend: null,
       people: null,
       isWorkplaceSelected: false,
-      personAtWorkplace: null,
+      selectedPerson: null,
     };
   },
   created() {
@@ -47,11 +47,19 @@ export default {
       return this.people.find((item) => item.tableId === wpId);
     },
     officeClickHandler(event) {
-      const clickedWpElement = event.target.closest('.workplace');
-      if (clickedWpElement) {
-        const clickedWpId = Number(clickedWpElement.getAttribute('id').match(/\d+/));
-        this.personAtWorkplace = this.getPersonAtWorkplace(clickedWpId);
+      if (event.target.closest('.workplace')) {
+        const clickedWpId = Number(event.target.closest('.workplace')
+          .getAttribute('id').match(/\d+/));
+        const personAtWorkplace = this.getPersonAtWorkplace(clickedWpId);
+        if (personAtWorkplace) {
+          this.selectedPerson = personAtWorkplace;
+        } else {
+          this.selectedPerson = null;
+        }
         this.isWorkplaceSelected = true;
+      } else if (event.target.closest('.map')) {
+        this.selectedPerson = null;
+        this.isWorkplaceSelected = false;
       }
     },
   }

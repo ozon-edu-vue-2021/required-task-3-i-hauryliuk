@@ -60,7 +60,7 @@
                     Место пустое
                 </div>
 
-                <PersonCard :person="person" />
+                <PersonCard v-else :person="person" />
             </div>
         </div>
     </div>
@@ -97,6 +97,11 @@ export default {
     },
     mounted() {
         this.makeChart();
+    },
+    updated() {
+        if (this.$refs.chart) {
+            this.makeChart()
+        }
     },
     methods: {
         closeProfile() {
