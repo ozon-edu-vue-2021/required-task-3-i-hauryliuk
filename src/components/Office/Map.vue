@@ -15,17 +15,15 @@
 </template>
 
 <script>
-import tablesData from '../assets/data/tables.json';
-import legendData from '../assets/data/legend.json';
-import PlanSVG from '../assets/images/map.svg';
-import WorkPlaceSVG from '../assets/images/workPlace.svg';
+import tablesData from '../../assets/data/tables.json';
+import PlanSVG from '../../assets/images/map.svg';
+import WorkPlaceSVG from '../../assets/images/workPlace.svg';
 import * as d3 from 'd3';
 
 export default {
     data() {
         return {
             tables: [],
-            legend: [],
             isLoading: false,
             planSVG: null,
             planSVGError: false,
@@ -33,13 +31,18 @@ export default {
             workPlaceSVG: null,
         };
     },
+    props: {
+        legend: {
+            type: Array,
+            required: true,
+        }
+    },
     components: {
         PlanSVG,
         WorkPlaceSVG,
     },
     created() {
-        this.tables = tablesData;
-        this.legend = legendData;
+        this.loadTables();
     },
     mounted() {
         this.isLoading = true;
@@ -64,6 +67,9 @@ export default {
                     .html(this.workPlaceSVG.html())
                     .attr('fill', this.legend.find((it) => it.group_id === table.group_id)?.color ?? 'transparent');
             });
+        },
+        loadTables() {
+            this.tables = tablesData;
         },
     },
 };

@@ -27,7 +27,7 @@
                         v-if="legend.length > 0"
                         class="legend__items"
                     >
-                        <Draggable v-model="legend">
+                        <Draggable v-model="localLegend">
                             <LegendItem
                                 v-for="(item, index) in legend"
                                 :key="index"
@@ -69,12 +69,16 @@
 <script>
 import LegendItem from "./SideMenu/LegendItem.vue";
 import PersonCard from "./SideMenu/PersonCard.vue";
-import legendData from "@/assets/data/legend.json";
 import { Doughnut as PieChart } from "vue-chartjs";
 import Draggable from "vuedraggable";
 
 
 export default {
+    data() {
+        return {
+            localLegend: null,
+        };
+    },
     props: {
         isUserOpenned: {
             type: Boolean,
@@ -84,6 +88,10 @@ export default {
             type: Object,
             default: null,
         },
+        legend: {
+            type: Array,
+            required: true,
+        },
     },
     components: {
         LegendItem,
@@ -91,32 +99,24 @@ export default {
         PieChart,
         Draggable,
     },
-    data() {
-        return {
-            legend: [],
-        };
-    },
     created() {
-        this.loadLegend();
+        this.localLegend = this.legend;
     },
     mounted() {
         this.makeChart();
     },
     methods: {
-        loadLegend() {
-            this.legend = legendData;
-        },
         closeProfile() {
             this.$emit("update:isUserOpenned", false);
         },
         makeChart() {
             const legendChartData = {
-                labels: this.legend.map((item) => item.text),
+                labels: this.localLegend.map((item) => item.text),
                 datasets: [
                     {
                         label: 'Легенда',
-                        backgroundColor: this.legend.map((item) => item.color),
-                        data: this.legend.map((item) => item.counter),
+                        backgroundColor: this.localLegend.map((item) => item.color),
+                        data: this.localLegend.map((item) => item.counter),
                     },
                 ],
             };
