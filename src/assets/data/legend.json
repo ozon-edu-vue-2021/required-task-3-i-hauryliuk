@@ -1,26 +1,26 @@
 [
   {
     "group_id": 0,
-    "color": "blueviolet",
+    "color": "#e92525",
     "text": "Подразделение 1",
-    "counter": 3
+    "counter": 4
   },
   {
     "group_id": 1,
-    "color": "blue",
+    "color": "#5d43b2",
     "text": "Подразделение 2",
-    "counter": 6
+    "counter": 5
   },
   {
     "group_id": 2,
-    "color": "violet",
+    "color": "#1dbb1d",
     "text": "Подразделение 3",
-    "counter": 3
+    "counter": 4
   },
   {
     "group_id": 3,
-    "color": "deeppink",
+    "color": "#e9c725",
     "text": "Подразделение 4",
-    "counter": 2
+    "counter": 1
   }
 ]
