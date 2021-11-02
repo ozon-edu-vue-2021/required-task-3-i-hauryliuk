@@ -47,9 +47,9 @@ export default {
       return this.people.find((item) => item.tableId === wpId);
     },
     officeClickHandler(event) {
-      if (event.target.closest('.workplace')) {
-        const clickedWpId = Number(event.target.closest('.workplace')
-          .getAttribute('id').match(/\d+/));
+      const clickedWp = event.target.closest('.workplace');
+      if (clickedWp) {
+        const clickedWpId = Number(clickedWp.getAttribute('id').match(/\d+/));
         const personAtWorkplace = this.getPersonAtWorkplace(clickedWpId);
         if (personAtWorkplace) {
           this.selectedPerson = personAtWorkplace;
