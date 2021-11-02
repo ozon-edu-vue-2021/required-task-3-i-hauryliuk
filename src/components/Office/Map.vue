@@ -43,6 +43,7 @@ export default {
     },
     created() {
         this.loadTables();
+        this.syncLegendWithTables();
     },
     mounted() {
         this.isLoading = true;
@@ -70,6 +71,14 @@ export default {
         },
         loadTables() {
             this.tables = tablesData;
+        },
+        syncLegendWithTables() {
+            this.legend.forEach((item) => {
+                const tablesInGroup = this.tables.filter((table) => table['group_id'] === item['group_id']).length;
+                if (tablesInGroup !== item.counter) {
+                    item.counter = tablesInGroup;
+                }
+            });
         },
     },
 };
