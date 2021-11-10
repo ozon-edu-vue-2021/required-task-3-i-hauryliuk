@@ -27,7 +27,7 @@
                         v-if="legend.length > 0"
                         class="legend__items"
                     >
-                        <Draggable v-model="legend">
+                        <Draggable :list="legend" @change="changeHandler">
                             <LegendItem
                                 v-for="(item, index) in legend"
                                 :key="index"
@@ -60,7 +60,7 @@
                     Место пустое
                 </div>
 
-                <PersonCard :person="person" />
+                <PersonCard v-else :person="person" />
             </div>
         </div>
     </div>
@@ -69,9 +69,9 @@
 <script>
 import LegendItem from "./SideMenu/LegendItem.vue";
 import PersonCard from "./SideMenu/PersonCard.vue";
-import legendData from "@/assets/data/legend.json";
 import { Doughnut as PieChart } from "vue-chartjs";
 import Draggable from "vuedraggable";
+import Vue from 'vue';
 
 
 export default {
@@ -84,6 +84,10 @@ export default {
             type: Object,
             default: null,
         },
+        legend: {
+            type: Array,
+            required: true,
+        },
     },
     components: {
         LegendItem,
@@ -91,23 +95,19 @@ export default {
         PieChart,
         Draggable,
     },
-    data() {
-        return {
-            legend: [],
-        };
-    },
-    created() {
-        this.loadLegend();
-    },
     mounted() {
         this.makeChart();
     },
+    updated() {
+        if (this.$refs.chart) {
+            this.makeChart()
+        }
+    },
     methods: {
-        loadLegend() {
-            this.legend = legendData;
-        },
         closeProfile() {
-            this.$emit("update:isUserOpenned", false);
+            this.$emit('update:person', null);
+            this.$emit('update:isUserOpenned', false);
+            Vue.nextTick(this.makeChart);
         },
         makeChart() {
             const legendChartData = {
@@ -127,6 +127,10 @@ export default {
                 },
             };
             this.$refs.chart.renderChart(legendChartData, options);
+        },
+        changeHandler() {
+            this.$emit('update:legend', this.legend);
+            this.makeChart();
         },
     },
 };
